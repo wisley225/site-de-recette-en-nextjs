@@ -8,9 +8,11 @@ import Explore from './Explore';
 import Menu from './menu';
 import Comment from './comment';
 import Footer from './footer';
+import Slide from './slide';
+import Link from 'next/link';
 import { url } from "inspector";
 
-const Header = () => {
+const RecipeRoom =() => {
   const refRotation = useRef<HTMLDivElement>(null);
   const refCarousel = useRef<HTMLDivElement>(null);
   const [indexActuel, setIndexActuel] = useState(0);
@@ -111,7 +113,7 @@ const Header = () => {
 
   return (
     <>
-     <main className="h-screen     text-white">
+     <main className="h-screen text-white">
   <nav>
   <div className='  absolute z-50 flex justify-between items-center  w-full   p-4'>
    <h1 className=' text-4xl  font-serif'>Delice Room</h1>
@@ -121,12 +123,15 @@ const Header = () => {
         <li><a href="#">Food Menu</a></li>
         <li><a href="#">About</a></li>
         <li className=' cursor-pointer border-4 px-6 py-2 rounded-full text-orange-200 border-orange-200 hover:text-orange-100 hover:border-orange-100 transition-colors '><a href="#">Login</a></li>
+      <Link  href='/formulaire'>
+      <li className=' cursor-pointer border-4 px-6 py-2 rounded-full text-orange-200 border-orange-200 hover:text-orange-100 hover:border-orange-100 transition-colors '>sign up</li>
+      </Link>   
       </ul>
   </div>
 </nav>
 
-    <div className='flex size-full border'>
-      <div className='w-9/12 flex flex-col'>
+    <div className='flex size-full '>
+      <div className='w-7/12  flex flex-col'>
         <div>
           {/*   carousel de rotation */}
           <div ref={refRotation} className='border-green-200 size-[800px] absolute border-[100px] rounded-full bottom-96 -left-16'>
@@ -170,7 +175,7 @@ const Header = () => {
         {/*  carousel horizontale */}
         <div ref={refCarousel} className=' relative z-20 bottom-10 mt-auto h-28 flex justify-between items-center w-4/6'>
           <FaChevronLeft
-            className='text-3xl cursor-pointer hover:text-amber-600 transition-colors'
+            className='text-3xl relative z-20 cursor-pointer hover:text-amber-600 transition-colors'
             onClick={platPrecedent}
           />
           {plats.map((plat, index) => (
@@ -189,17 +194,15 @@ const Header = () => {
           ))}
           <FaChevronRight
             onClick={platSuivant}
-            className='text-3xl cursor-pointer hover:text-amber-600 transition-colors'
+            className='text-3xl relative z-20 cursor-pointer hover:text-amber-600 transition-colors'
           />
         </div>
      
       </div>
+     <Slide/>
 
 {/*  deuxieme parti ici */}
-   
-
-   
-    </div>
+</div>
   </main>
   <Explore/>
   <Menu/>
@@ -210,5 +213,5 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default RecipeRoom;
 

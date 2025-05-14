@@ -15,9 +15,9 @@ const Comment = () => {
  />
 
 
- <div  className=' pt-32 flex  border justify-center'>
+ <div  className=' pt-32 flex   justify-center'>
 
-<div className='  flex justify-center items-center border w-xl '>
+<div className='  flex justify-center items-center  w-xl '>
 <Image
 src={`/bol_spagetti.png`}
 height={300}
@@ -39,7 +39,7 @@ className=' '
 
 
 </div>
-<div className=' w-xl border  h-auto '>
+<div className=' w-xl   h-auto '>
     <h1 className=' text-4xl font-serif font-black'> let's see what other says</h1>
     <p className='mb-10'>Please serve yourself without any hesitate</p>
     <p className=' mb-10 '>
