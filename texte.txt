@@ -1,0 +1,66 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
+import { writeFile } from 'fs/promises';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+
+const prisma = new PrismaClient();
+
+// Fonction utilitaire pour enregistrer une image sur le disque
+async function enregistrerImage(base64: string, dossier: string): Promise<string> {
+  const buffer = Buffer.from(base64.split(',')[1], 'base64');
+  const nomFichier = `${uuidv4()}.jpg`;
+  const chemin = path.join(process.cwd(), 'public', dossier, nomFichier);
+  await writeFile(chemin, buffer);
+  return `/${dossier}/${nomFichier}`;
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { donneesFormulaire, etapes } = body;
+
+    // 1. Sauvegarder l'image principale
+    const urlImagePrincipale = await enregistrerImage(
+      donneesFormulaire.apercuImagePrincipale,
+      'uploads'
+    );
+
+    // 2. Créer la recette
+    const recette = await prisma.recette.create({
+      data: {
+        nom: donneesFormulaire.nom,
+        nomChef: donneesFormulaire.nomChef,
+        tempsPreparation: parseInt(donneesFormulaire.tempsPreparation),
+        nbr_pers: parseInt(donneesFormulaire.nbr_pers),
+        difficulte: donneesFormulaire.difficulte,
+        imagePrincipale: urlImagePrincipale,
+      },
+    });
+
+    // 3. Ajouter les étapes avec images
+    for (const etape of etapes) {
+      const nouvelleEtape = await prisma.etape.create({
+        data: {
+          description: etape.description,
+          recetteId: recette.id,
+        },
+      });
+
+      for (const image of etape.images) {
+        const urlImage = await enregistrerImage(image.apercu, 'uploads');
+        await prisma.imageEtape.create({
+          data: {
+            url: urlImage,
+            etapeId: nouvelleEtape.id,
+          },
+        });
+      }
+    }
+
+    return NextResponse.json({ success: true, message: 'Recette enregistrée avec succès.' });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ success: false, message: 'Erreur serveur.' }, { status: 500 });
+  }
+}

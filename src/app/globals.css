@@ -22,19 +22,30 @@
 /* globals.css */
 @layer utilities {
   .reflected {
-     /* -webkit-box-reflect: below -20px   linear-gradient(to top, rgba(255, 255, 255, 0.3), transparent 20%); 
-  clip-path: circle(70%); */
+
   clip-path: circle(80%);
   -webkit-box-reflect: below 10px linear-gradient(to top , rgba(0,0,0,0.0), rgba(0,0,0,0.1));
 
   }
 
-  .bground{
+  .reflet{
+  -webkit-box-reflect: below -100px   linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.1)); 
 
-    background: url('../../public/arriere_plan.avif') no-repeat center;
-    background-size: cover ;
-  }
 }
+
+.gradient{
+  background: radial-gradient(rgba(225, 225, 225, 0.288) ,rgba(225, 225, 225, 0.267));
+}
+/* .ombre{
+  box-shadow:19px 5px 10px 5px rgba(0, 0, 0, 0.2);
+  
+} */
+}
+
+
+
+
+
 
 
 

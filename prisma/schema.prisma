@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+ // output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+model User {
+  id        Int       @id @default(autoincrement())
+  fullname      String
+  email     String    @unique
+  password  String
+  recettes  Recette[] // Recettes publiées par l'utilisateur
+  commentaires Commentaire[]
+  likes     Like[]
+  createdAt DateTime  @default(now())
+}
+
+model Recette {
+  id               Int       @id @default(autoincrement())
+  nom              String
+  nomChef          String
+  tempsPreparation Int
+  nbr_pers         Int
+  difficulte       String
+  imagePrincipale  String
+  utilisateurId    Int
+  utilisateur      User      @relation(fields: [utilisateurId], references: [id])
+  etapes           Etape[]
+  commentaires     Commentaire[]
+  likes            Like[]
+  createdAt        DateTime  @default(now())
+}
+
+model Etape {
+  id         Int         @id @default(autoincrement())
+  description String
+  recetteId  Int
+  recette    Recette     @relation(fields: [recetteId], references: [id])
+  images     ImageEtape[]
+}
+
+model ImageEtape {
+  id       Int    @id @default(autoincrement())
+  url      String
+  etapeId  Int
+  etape    Etape  @relation(fields: [etapeId], references: [id])
+}
+
+model Commentaire {
+  id        Int      @id @default(autoincrement())
+  contenu   String
+  recetteId Int
+  userId    Int
+  recette   Recette  @relation(fields: [recetteId], references: [id])
+  utilisateur User   @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Like {
+  id        Int     @id @default(autoincrement())
+  userId    Int
+  recetteId Int
+  utilisateur User  @relation(fields: [userId], references: [id])
+  recette   Recette @relation(fields: [recetteId], references: [id])
+  
+  @@unique([userId, recetteId]) // Un utilisateur ne peut liker qu'une fois une recette
+}

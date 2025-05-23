@@ -46,7 +46,7 @@ const RecipeRoom =() => {
     }
   ];
 
-  const animerRotation = (direction: 'suivant' | 'precedent') => {
+  const animerRotation = (direction: 'suivant'|'precedent') => {
     if (!refRotation.current || enAnimation) return;
     
     setEnAnimation(true);
@@ -63,10 +63,10 @@ const RecipeRoom =() => {
   const mettreAJourCarousel = (nouvelIndex: number) => {
     if (!refCarousel.current) return;
     
-    const elements = refCarousel.current.querySelectorAll('div');
+    const elements=refCarousel.current.querySelectorAll('div');
     elements.forEach((element, i) => {
       if (i === nouvelIndex) {
-        gsap.to(element, {
+        gsap.to(element,{
           scale: 1.5,
           borderColor: '#dc2626',
           duration: 0.3,
@@ -87,7 +87,7 @@ const RecipeRoom =() => {
     if (enAnimation) return;
     
     setIndexActuel(prev => {
-      const nouvelIndex = (prev + 1) % plats.length;
+      const nouvelIndex=(prev + 1) % plats.length;
       mettreAJourCarousel(nouvelIndex);
       animerRotation('suivant');
       return nouvelIndex;
@@ -97,7 +97,7 @@ const RecipeRoom =() => {
   const platPrecedent = () => {
     if (enAnimation) return;
     
-    setIndexActuel(prev => {
+    setIndexActuel(prev =>{
       const nouvelIndex = (prev - 1 + plats.length) % plats.length;
       mettreAJourCarousel(nouvelIndex);
       animerRotation('precedent');
